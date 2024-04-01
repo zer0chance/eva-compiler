@@ -1,10 +1,10 @@
-set -ux
+set -eux
 
-cmake --build . --clean-first -v
+cmake --build .
 
 ./evac
 
 lli out.ll
 
-echo $?
+# echo $?
 
