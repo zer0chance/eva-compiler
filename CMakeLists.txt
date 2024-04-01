@@ -10,10 +10,13 @@ include_directories(${LLVM_INCLUDE_DIRS})
 separate_arguments(LLVM_DEFINITIONS_LIST NATIVE_COMMAND ${LLVM_DEFINITIONS})
 add_definitions(${LLVM_DEFINITIONS_LIST})
 
+include_directories(src src/parser src/compiler)
+
 add_executable(
   evac
   eva-compiler.cpp
   src/EvaLLVM.cpp
+  src/parser/EvaParser.cpp
 )
 
 # Find the libraries that correspond to the LLVM components that we wish to use
