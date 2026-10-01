@@ -2,11 +2,11 @@ evac
 *.exe
 *.o
 *.ll
-CMakeCache.txt
-CMakeFiles/
-cmake_install.cmake
+build/
 Makefile
 .vscode
 cscope*
 tags
-
+.cache
+compile_commands.json
+.gitignore

@@ -12,18 +12,22 @@
 #include "llvm/IR/LLVMContext.h"
 
 #include "parser/EvaParser.hpp"
+#include "Environment.hpp"
 
 using syntax::EvaParser;
+using Env = std::shared_ptr<Environment>;
 
 class EvaLLVM {
 
   std::unique_ptr<llvm::LLVMContext> ctx;
-  
+
   std::unique_ptr<llvm::Module> module;
-  
+
   std::unique_ptr<llvm::IRBuilder<>> builder;
 
   std::unique_ptr<EvaParser> parser;
+
+  std::shared_ptr<Environment> GlobalEnv;
 
   /**
    * Currently compiling function
@@ -36,16 +40,18 @@ class EvaLLVM {
 
   void compile(const Exp& ast);
 
-  llvm::Value* gen(const Exp& exp);
+  llvm::Value* gen(const Exp& exp, Env env);
 
   void setupExternalFunctions();
 
-  llvm::Function* createFunction(const std::string& fnName, llvm::FunctionType* fnType);
+  void setupGlobalEnvironment();
+
+  llvm::Function* createFunction(const std::string& fnName, llvm::FunctionType* fnType, Env env);
 
   /**
    * Creates funtion prototype (declaration)
    */
-  llvm::Function* createFunctionProto(const std::string& fnName, llvm::FunctionType* fnType);
+  llvm::Function* createFunctionProto(const std::string& fnName, llvm::FunctionType* fnType, Env env);
 
   void createFunctionBlock(llvm::Function* fn);
 
@@ -57,10 +63,11 @@ public:
   EvaLLVM() : parser(std::make_unique<EvaParser>()){
     moduleInit();
     setupExternalFunctions();
+    setupGlobalEnvironment();
   }
 
   void exec(const std::string& program) {
-    auto ast = parser->parse(program);
+    auto ast = parser->parse("(begin " + program + ")");
 
     compile(ast);
 
@@ -72,4 +79,3 @@ public:
 };
 
 #endif
-

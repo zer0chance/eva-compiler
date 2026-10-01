@@ -1,5 +1,7 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.20)
 project(eva-compiler)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(LLVM REQUIRED CONFIG)
 
@@ -16,6 +18,7 @@ add_executable(
   evac
   eva-compiler.cpp
   src/EvaLLVM.cpp
+  src/Environment.cpp
   src/parser/EvaParser.cpp
 )
 
@@ -24,4 +27,3 @@ llvm_map_components_to_libnames(llvm_libs support core irreader)
 
 # Link against LLVM libraries
 target_link_libraries(evac ${llvm_libs})
-

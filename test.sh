@@ -1,10 +1,9 @@
 set -eux
 
-cmake --build .
+cmake --build build
 
-./evac
+./build/evac
 
 lli out.ll
 
 # echo $?
-
